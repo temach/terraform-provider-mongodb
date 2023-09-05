@@ -67,6 +67,6 @@ You are now ready to use the local provider as you like.
 For an example code you can use:
 
 ```bash
-cd mongodb
+cd examples
 make apply
 ```

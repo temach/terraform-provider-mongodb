@@ -251,6 +251,7 @@ func updateRole(client *mongo.Client, role string, roles []Role, privilege []Pri
 		return result.Err()
 	}
 	return nil
+
 }
 
 func MongoClientInit(conf *MongoDatabaseConfiguration) (*mongo.Client, error) {

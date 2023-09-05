@@ -21,7 +21,7 @@ ifeq ($(UNAME),Darwin)
 endif
 
 HOSTNAME=registry.terraform.io
-NAMESPACE=Kaginari
+NAMESPACE=fabiovpcaumo
 NAME=mongodb
 VERSION=9.9.9
 ## on linux base os

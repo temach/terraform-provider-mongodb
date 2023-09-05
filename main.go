@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/Kaginari/terraform-provider-mongodb/mongodb"
+	"github.com/fabiovpcaumo/terraform-provider-mongodb/mongodb"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/plugin"
 )
 

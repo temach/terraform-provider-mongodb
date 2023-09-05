@@ -2,9 +2,12 @@ package mongodb
 
 import (
 	"fmt"
+	"slices"
+
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/helper/schema"
+	"go.mongodb.org/mongo-driver/bson"
 )
 
 func validateDiagFunc(validateFunc func(interface{}, string) ([]string, []error)) schema.SchemaValidateDiagFunc {
@@ -24,5 +27,47 @@ func validateDiagFunc(validateFunc func(interface{}, string) ([]string, []error)
 			})
 		}
 		return diags
+	}
+}
+
+func getActions(privilegeDto PrivilegeDto) []string {
+	var actions []string = privilegeDto.Actions
+	slices.Sort(actions)
+	return actions
+}
+
+func getPrivilegesFromDto(privilegeDtos []PrivilegeDto) []Privilege {
+	var privileges []Privilege
+
+	for _, element := range privilegeDtos {
+		var prv Privilege
+		prv.Resource = Resource{
+			Db:         element.Db,
+			Collection: element.Collection,
+		}
+		prv.Actions = getActions(element)
+		privileges = append(privileges, prv)
+	}
+
+	return privileges
+}
+
+func getRoleManagementCommand(commandName string, roleName string, roles []Role, privileges []PrivilegeDto) bson.D {
+	rolesArr := bson.A{}
+
+	for _, role := range roles {
+		rolesArr = append(rolesArr, role)
+	}
+
+	privilegesArr := bson.A{}
+
+	for _, privilege := range getPrivilegesFromDto(privileges) {
+		privilegesArr = append(privilegesArr, privilege)
+	}
+
+	return bson.D{
+		{Key: commandName, Value: roleName},
+		{Key: "privileges", Value: privilegesArr},
+		{Key: "roles", Value: rolesArr},
 	}
 }

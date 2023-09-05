@@ -6,13 +6,14 @@ import (
 	"crypto/x509"
 	"errors"
 	"fmt"
+	"net/url"
+	"strconv"
+	"time"
+
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"golang.org/x/net/proxy"
-	"net/url"
-	"strconv"
-	"time"
 )
 
 type ClientConfig struct {
@@ -226,30 +227,25 @@ func getRole(client *mongo.Client, roleName string, database string) (SingleResu
 }
 
 func createRole(client *mongo.Client, role string, roles []Role, privilege []PrivilegeDto, database string) error {
-	var privileges []Privilege
 	var result *mongo.SingleResult
-	for _, element := range privilege {
-		var prv Privilege
-		prv.Resource = Resource{
-			Db:         element.Db,
-			Collection: element.Collection,
-		}
-		prv.Actions = element.Actions
-		privileges = append(privileges, prv)
+
+	command := getRoleManagementCommand("createRole", role, roles, privilege)
+
+	result = client.Database(database).RunCommand(context.Background(), command)
+
+	if result.Err() != nil {
+		return result.Err()
 	}
-	if len(roles) != 0 && len(privileges) != 0 {
-		result = client.Database(database).RunCommand(context.Background(), bson.D{{Key: "createRole", Value: role},
-			{Key: "privileges", Value: privileges}, {Key: "roles", Value: roles}})
-	} else if len(roles) == 0 && len(privileges) != 0 {
-		result = client.Database(database).RunCommand(context.Background(), bson.D{{Key: "createRole", Value: role},
-			{Key: "privileges", Value: privileges}, {Key: "roles", Value: []bson.M{}}})
-	} else if len(roles) != 0 && len(privileges) == 0 {
-		result = client.Database(database).RunCommand(context.Background(), bson.D{{Key: "createRole", Value: role},
-			{Key: "privileges", Value: []bson.M{}}, {Key: "roles", Value: roles}})
-	} else {
-		result = client.Database(database).RunCommand(context.Background(), bson.D{{Key: "createRole", Value: role},
-			{Key: "privileges", Value: []bson.M{}}, {Key: "roles", Value: []bson.M{}}})
-	}
+	return nil
+}
+
+func updateRole(client *mongo.Client, role string, roles []Role, privilege []PrivilegeDto, database string) error {
+
+	var result *mongo.SingleResult
+
+	command := getRoleManagementCommand("updateRole", role, roles, privilege)
+
+	result = client.Database(database).RunCommand(context.Background(), command)
 
 	if result.Err() != nil {
 		return result.Err()

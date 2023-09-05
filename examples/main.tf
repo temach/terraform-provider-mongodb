@@ -3,20 +3,19 @@ terraform {
 
   required_providers {
     mongodb = {
-      source = "registry.terraform.io/Kaginari/mongodb"
+      source = "registry.terraform.io/fabiovpcaumo/mongodb"
       version = "9.9.9"
     }
   }
 }
 
 provider "mongodb" {
-  host = "mongo"
+  host = "mongo"  # when running local tests, you might have to update this to the ``mongo`` container IP
   port = "27017"
   username = "root"
   password = "root"
   ssl = false
   auth_database = "admin"
-  proxy = "socks5://localhost:1080"
 }
 
 variable "username" {
@@ -40,7 +39,6 @@ resource "mongodb_db_role" "role" {
     collection = "*"
     actions = ["collStats"]
   }
-
 
 }
 
@@ -84,6 +82,5 @@ resource "mongodb_db_user" "user" {
     role = "readWrite"
     db =   "monta"
   }
-
 
 }

@@ -21,7 +21,7 @@ ifeq ($(UNAME),Darwin)
 endif
 
 HOSTNAME=registry.terraform.io
-NAMESPACE=Kaginari
+NAMESPACE=fabiovpcaumo
 NAME=mongodb
 VERSION=9.9.9
 ## on linux base os
@@ -40,22 +40,3 @@ re-install:
 	cd examples && make init
 lint:
 	 golangci-lint run
-
-
-documentdb-test:
-	rm -f ${TERRAFORM_PLUGINS_DIRECTORY}/terraform-provider-${NAME}
-	go build -o ${TERRAFORM_PLUGINS_DIRECTORY}/terraform-provider-${NAME}
-	cd examples && rm -rf .terraform
-	cd examples/documentDB && rm -rf .terraform && make init
-
-documentdb-test-apply:
-	rm -f ${TERRAFORM_PLUGINS_DIRECTORY}/terraform-provider-${NAME}
-	go build -o ${TERRAFORM_PLUGINS_DIRECTORY}/terraform-provider-${NAME}
-	cd examples && rm -rf .terraform
-	cd examples/documentDB && rm -rf .terraform && make init && make apply
-
-documentdb-test-apply:
-	rm -f ${TERRAFORM_PLUGINS_DIRECTORY}/terraform-provider-${NAME}
-	go build -o ${TERRAFORM_PLUGINS_DIRECTORY}/terraform-provider-${NAME}
-	cd examples && rm -rf .terraform
-	cd examples/documentDB && rm -rf .terraform && make init && make destroy

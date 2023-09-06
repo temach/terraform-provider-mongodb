@@ -2,7 +2,7 @@ package mongodb
 
 import (
 	"fmt"
-	"slices"
+	"sort"
 
 	"github.com/hashicorp/go-cty/cty"
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -32,7 +32,7 @@ func validateDiagFunc(validateFunc func(interface{}, string) ([]string, []error)
 
 func getActions(privilegeDto PrivilegeDto) []string {
 	var actions []string = privilegeDto.Actions
-	slices.Sort(actions)
+	sort.Strings(actions)
 	return actions
 }
 

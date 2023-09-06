@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
-	"slices"
+	"sort"
 	"strings"
 
 	"github.com/hashicorp/terraform-plugin-sdk/v2/diag"
@@ -212,7 +212,7 @@ func resourceDatabaseRoleRead(ctx context.Context, data *schema.ResourceData, i 
 
 	for i, s := range result.Roles[0].Privileges {
 		actions := s.Actions
-		slices.Sort(actions)
+		sort.Strings(actions)
 		privileges[i] = map[string]interface{}{
 			"db":         s.Resource.Db,
 			"collection": s.Resource.Collection,

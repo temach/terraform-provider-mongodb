@@ -8,19 +8,27 @@
 
 This repository is a [Terraform](https://www.terraform.io) MongoDB/DocumentDB provider forked from Kaginari/terraform-provider-mongodb.
 
-# Using this provider from GitHub directly
+# Using the provider
 
 ```terraform
-module "mongodb" {
-    source = "github.com/fabiovpcaumo/terraform-provider-mongodb.git?ref=v<desired_version>"
+terraform {
+  required_providers {
+    mongodb = {
+      source = "fabiovpcaumo/mongodb"
+      version = "x.y.z" # Specify your desired version here
+    }
+  }
 }
 
+provider "mongodb" {
+  # Configuration options
+}
 ```
 
 ### Requirements
 
 - [Terraform](https://www.terraform.io/downloads.html) >= 0.13
-- [Go](https://golang.org/doc/install) >= 1.18
+- [Go](https://golang.org/doc/install) >= 1.17
 
 ### Installation
 

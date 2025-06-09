@@ -8,13 +8,15 @@
 
 This repository is a [Terraform](https://www.terraform.io) MongoDB/DocumentDB provider forked from Kaginari/terraform-provider-mongodb.
 
-# Using the provider
+This fork adds the ability to create users that use external authentication mechanisms, such as using AWS IAM user or role to authenticate to the database.
+
+# Using the provider and example password-less user
 
 ```terraform
 terraform {
   required_providers {
     mongodb = {
-      source = "fabiovpcaumo/mongodb"
+      source = "slvggo/mongodb"
       version = "x.y.z" # Specify your desired version here
     }
   }
@@ -22,6 +24,23 @@ terraform {
 
 provider "mongodb" {
   # Configuration options
+}
+
+# This example creates a database user with authentication via AWS IAM user or role. `auth_database` must be "$external"
+# and `auth_mechanisms` must include ["MONGODB-AWS"] per documentation:
+# https://docs.aws.amazon.com/documentdb/latest/developerguide/iam-identity-auth.html#iam-identity-auth-get-started
+resource "mongodb_db_user" "passwordless_user" {
+  name = "arn:aws:iam::123456789123:role/iamrole" # Or use an IAM user, example: "arn:aws:iam::123456789123:user/iamuser"
+  auth_database = "$external"
+  auth_mechanisms = ["MONGODB-AWS"]
+  role {
+    role = "read"
+    db =   "readDB"
+  }
+  role {
+    role = "readWrite"
+    db =   "readWriteDB"
+  }
 }
 ```
 

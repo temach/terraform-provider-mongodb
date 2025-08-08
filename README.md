@@ -29,7 +29,7 @@ provider "mongodb" {
 # This example creates a database user with authentication via AWS IAM user or role. `auth_database` must be "$external"
 # and `auth_mechanisms` must include ["MONGODB-AWS"] per documentation:
 # https://docs.aws.amazon.com/documentdb/latest/developerguide/iam-identity-auth.html#iam-identity-auth-get-started
-resource "mongodb_db_user" "passwordless_user" {
+resource "mongodb_db_user_oauth" "passwordless_user" {
   name = "arn:aws:iam::123456789123:role/iamrole" # Or use an IAM user, example: "arn:aws:iam::123456789123:user/iamuser"
   auth_database = "$external"
   auth_mechanisms = ["MONGODB-AWS"]
@@ -40,6 +40,20 @@ resource "mongodb_db_user" "passwordless_user" {
   role {
     role = "readWrite"
     db =   "readWriteDB"
+  }
+}
+
+# This example creates a database user 
+resource "mongodb_db_user" "password_user" {
+  name = "ms-test" # Or use an IAM user, example: "arn:aws:iam::123456789123:user/iamuser"
+  auth_database = "bolt"
+  role {
+    role = "readWrite"
+    db =   "ms-test"
+  }
+  role {
+    role = "readWrite"
+    db =   "invlog"
   }
 }
 ```

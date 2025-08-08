@@ -6,7 +6,7 @@
 ![GitHub Workflow Status](https://img.shields.io/github/workflow/status/fabiovpcaumo/terraform-provider-mongodb/golangci?logo=github&style=flat-square)
 ![GitHub issues](https://img.shields.io/github/issues/fabiovpcaumo/terraform-provider-mongodb?logo=github&style=flat-square)
 
-This repository is a [Terraform](https://www.terraform.io) MongoDB/DocumentDB provider forked from Kaginari/terraform-provider-mongodb.
+This repository is a [Terraform](https://www.terraform.io) MongoDB/DocumentDB provider forked from Kaginari/terraform-provider-mongodb and fabiovpcaumo/terraform-provider-mongodb.
 
 This fork adds the ability to create users that use external authentication mechanisms, such as using AWS IAM user or role to authenticate to the database.
 
@@ -16,7 +16,7 @@ This fork adds the ability to create users that use external authentication mech
 terraform {
   required_providers {
     mongodb = {
-      source = "slvggo/mongodb"
+      source = "temach/mongodb"
       version = "x.y.z" # Specify your desired version here
     }
   }

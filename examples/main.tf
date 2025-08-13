@@ -3,10 +3,14 @@ terraform {
 
   required_providers {
     mongodb = {
-      source = "registry.terraform.io/fabiovpcaumo/mongodb"
+      source = "temach/mongodb"
       version = "9.9.9"
     }
   }
+}
+
+provider "mongodb" {
+  # Configuration options
 }
 
 provider "mongodb" {
